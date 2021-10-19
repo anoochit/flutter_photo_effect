@@ -15,6 +15,7 @@ class AppController extends GetxController {
   var listEffectMenu = [
     "Reset",
     "Blur",
+    "Dilate",
     "Grey",
     "Jet",
     "Embossed",
@@ -37,7 +38,17 @@ class AppController extends GetxController {
     });
     return result;
   }
-/* 
+
+  Future<Uint8List?> dilate() async {
+    var result = await platform.invokeMethod('dilate', {
+      "pathType": 3,
+      "pathString": '',
+      "data": resultFilter,
+      'kernelSize': [3, 3],
+    });
+    return result;
+  }
+
   Future<Uint8List?> cvtColor() async {
     var result = await platform.invokeMethod('cvtColor', {
       "pathType": 3,
@@ -68,7 +79,7 @@ class AppController extends GetxController {
       'dy': 1,
     });
     return result;
-  } */
+  }
 
   Future<void> setImagePath({required String path}) async {
     imagePath = RxString(path);
@@ -98,7 +109,10 @@ class AppController extends GetxController {
           case "Blur":
             resultFilter = (await gaussianBlur())!;
             break;
-          /*
+          case "Dilate":
+            resultFilter = (await dilate())!;
+            break;
+
           case "Grey":
             resultFilter = (await cvtColor())!;
             break;
@@ -107,8 +121,7 @@ class AppController extends GetxController {
             break;
           case "Embossed":
             resultFilter = (await scharr())!;
-            break; 
-          */
+            break;
         }
       }
       return resultFilter;
